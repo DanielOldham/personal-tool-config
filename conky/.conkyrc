@@ -1,0 +1,65 @@
+# Conky settings
+update_interval 1
+double_buffer yes
+no_buffers yes
+use_xft yes
+xftfont Open Sans SemiBold:size=10
+# Window specifications
+own_window yes
+own_window_type dock
+own_window_hints undecorated,ontop,skip_taskbar
+minimum_size 0 0
+maximum_width 390
+xinerama_head 1
+# Alignment
+alignment bottom_right
+gap_x 8
+gap_y 0
+border_inner_margin 8
+border_outer_margin 0
+own_window_transparent no
+own_window_argb_visual no
+own_window_argb_value 0
+own_window_colour 000000
+TEXT
+${alignc}${font :size=13:bold}${time %I:%M %p} - ${time %a %b %d %Y}
+${hr 1}
+${alignc}${font :size=10}Kernel: ${kernel}
+${alignc}Uptime: $uptime
+#${color 1793d1}${font ConkySymbols:size=50}h${offset 10}${voffset -65}t${font}
+${color white}${hr 1}
+#Temp Block
+${color White}${font ConkySymbols:size=18:bold}h${font :bold:}Temps ${goto 150}CPU: ${hwmon 1 temp 1}°C${goto 260}
+${color DB2129}${execbar sensors | grep Tctl | awk '{print $2}'}
+${color White}GPU Edge: ${hwmon 6 temp 1}°C ${goto 150}Junc: ${hwmon 6 temp 2}°C${goto 260}
+${color DB2129}${execbar sensors | grep edge | awk '{print $2}'}
+${color White}GPU Fan: ${exec sensors | grep fan1 | awk '{print $2}'} RPM
+${color 50B99C}${execbar sensors | grep fan1 | awk '{print $2 / 5000 * 100}'}
+#GPU Block
+${color white}${font ConkySymbols:size=20}n${font :bold:} GPU${font}${goto 100}Sapphire AMD Radeon RX 9070XT ${exec awk 'NR==2{print $2}' /sys/class/drm/card0/device/pp_dpm_sclk}${alignr}${font :bold:}${execi 5 radeontop -d- -l1 | grep -o 'gpu [0-9]\{1,3\}' | cut -c 5-10}%${font}
+${color DB2129}${execbar "radeontop -d- -l1 | grep -o 'gpu [0-9]\{1,3\}' | cut -c 5-10"}
+${color DB2129}${execgraph "radeontop -d- -l1 | grep -o 'gpu [0-9]\{1,3\}' | cut -c 5-10" 30,190 000000 DB2129} ${execgraph "radeontop -d- -l1 | grep -o 'vram [0-9]\{1,3\}' | cut -c 5-10" 30,190 000000 DB2129} ${voffset 13} ${goto 25}${color white}GPU Usage: ${execi 5 radeontop -d- -l1 | grep -o 'gpu [0-9]\{1,3\}' | cut -c 5-10}%${voffset -30}${goto 215}VRAM Usage: ${execi 5 radeontop -d- -l1 | grep -o 'vram [0-9]\{1,3\}' | cut -c 5-10}%
+${hr 1}
+#CPU Block
+${color White}${font ConkySymbols:size=20}f${font :bold:} CPU${font}${goto 115}AMD Ryzen 5 7500F @ ${freq_g}GHz${alignr}${font :bold:}${cpu}%${font}
+${color E86427}${cpubar}
+${color E86427}${offset 10}${cpugraph cpu1 30,90 000000 E86427} ${cpugraph cpu2 30,90 000000 E86427} ${cpugraph cpu3 30,90 000000 E86427} ${cpugraph cpu4 30,90 000000 E86427} ${voffset 12} ${color White} ${goto 25}CPU 1: ${cpu cpu1}% ${goto 120}CPU 2: ${cpu cpu2}% ${goto 215}CPU 3: ${cpu cpu2}% ${voffset -29} ${goto 307}CPU 4: ${cpu cpu4}%
+${color E86427}${offset 10}${cpugraph cpu5 30,90 000000 E86427} ${cpugraph cpu6 30,90 000000 E86427} ${cpugraph cpu7 30,90 000000 E86427} ${cpugraph cpu8 30,90 000000 E86427} ${voffset 12} ${color White} ${goto 25}CPU 5: ${cpu cpu5}% ${goto 120}CPU 6: ${cpu cpu6}% ${goto 215}CPU 7: ${cpu cpu7}% ${voffset -29} ${goto 307}CPU 8: ${cpu cpu8}%
+${color E86427}${offset 10}${cpugraph cpu9 30,90 000000 E86427} ${cpugraph cpu10 30,90 000000 E86427} ${cpugraph cpu11 30,90 000000 E86427} ${cpugraph cpu12 30,90 000000 E86427} ${voffset 12} ${color White} ${goto 25}CPU 9: ${cpu cpu9}% ${goto 115}CPU 10: ${cpu cpu10}% ${goto 210}CPU 11: ${cpu cpu11}% ${voffset -29} ${goto 304}CPU 12: ${cpu cpu12}%
+${hr 1}
+#RAM Block
+${color White}${font ConkySymbols:size=16}j${font :bold:} RAM${goto 150}$mem / $memmax${alignr}${memperc}%${font}
+${color 438C8A}${membar}
+${color White}${font :size 11:bold}${offset 5}Top Processes ${alignr}${offset -5}CPU%${offset 10}MEM%
+${color 438C8A}${memgraph 120,390 000000 438C8A}${voffset -135}
+${color White}${offset 5}${top name 1} ${alignr 10}${offset -13}${top cpu 1}${offset 15}${top mem 1}
+${color White}${offset 5}${top name 2} ${alignr 10}${offset -13}${top cpu 2}${offset 15}${top mem 2}
+${color White}${offset 5}${top name 3} ${alignr 10}${offset -13}${top cpu 3}${offset 15}${top mem 3}
+${color White}${offset 5}${top name 4} ${alignr 10}${offset -13}${top cpu 4}${offset 15}${top mem 4}
+${color White}${offset 5}${top name 5} ${alignr 10}${offset -13}${top cpu 5}${offset 15}${top mem 5}
+${color White}${voffset 5}Total: $processes${goto 130}Cache: ${cached} ${alignr}Buffer: ${buffers}
+${hr 1}
+#File System Block
+${color White}${font ConkySymbols:size=20}k${font :Bold:} FILE SYSTEM${alignr}ROOT ${fs_used_perc /}% 
+${color 438C8A}${fs_bar /}
+${hr 1}
